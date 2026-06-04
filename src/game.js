@@ -4,8 +4,9 @@ const H = 600
 const SHIP_W = 36
 const SHIP_H = 20
 const SHIP_Y = H - 48
-const SHIP_SPEED = 5.5
-const BULLET_SPEED = 9
+const SHIP_SPEED = 3
+const BULLET_SPEED = 5
+const FIRE_COOLDOWN = 50
 const ALIEN_ROWS = 5
 const ALIEN_COLS = 11
 const ALIEN_W = 34
@@ -38,13 +39,15 @@ export function createGame(canvas) {
         id: 1,
         x: W * 0.22 - SHIP_W / 2,
         color: '#3ee8d6',
-        controls: 'wasd',
+        bulletColor: '#3ee8d6',
+        fireCooldown: 0,
       },
       {
         id: 2,
         x: W * 0.78 - SHIP_W / 2,
         color: '#ff4fd8',
-        controls: 'arrows',
+        bulletColor: '#ff4fd8',
+        fireCooldown: 25,
       },
     ]
 
@@ -105,26 +108,24 @@ export function createGame(canvas) {
     clampShip(s2)
   }
 
-  function tryFire(ship, key) {
-    if (!keys.has(key)) return
-    const cooldownKey = `fire-${ship.id}`
-    if (keys.has(cooldownKey)) return
+  function autoFire() {
+    for (const ship of ships) {
+      if (ship.fireCooldown > 0) {
+        ship.fireCooldown -= 1
+        continue
+      }
 
-    const hasBullet = playerBullets.some((b) => b.shipId === ship.id)
-    if (hasBullet) return
+      const hasBullet = playerBullets.some((b) => b.shipId === ship.id)
+      if (hasBullet) continue
 
-    playerBullets.push({
-      x: ship.x + SHIP_W / 2 - 2,
-      y: SHIP_Y - 4,
-      shipId: ship.id,
-    })
-    keys.add(cooldownKey)
-    setTimeout(() => keys.delete(cooldownKey), 280)
-  }
-
-  function firePlayerBullets() {
-    tryFire(ships[0], 'KeyW')
-    tryFire(ships[1], 'ArrowUp')
+      playerBullets.push({
+        x: ship.x + SHIP_W / 2 - 2,
+        y: SHIP_Y - 4,
+        shipId: ship.id,
+        color: ship.bulletColor,
+      })
+      ship.fireCooldown = FIRE_COOLDOWN
+    }
   }
 
   function updatePlayerBullets() {
@@ -158,11 +159,11 @@ export function createGame(canvas) {
       return
     }
 
-    const speed = 1.1 + (ALIEN_ROWS * ALIEN_COLS - alive.length) * 0.04
+    const speed = 0.55 + (ALIEN_ROWS * ALIEN_COLS - alive.length) * 0.018
     let hitEdge = false
 
     if (alienStepDown) {
-      for (const a of alive) a.y += 16
+      for (const a of alive) a.y += 10
       alienDir *= -1
       alienStepDown = false
     } else {
@@ -175,7 +176,7 @@ export function createGame(canvas) {
     if (hitEdge) alienStepDown = true
 
     frame++
-    if (frame % 48 === 0 && Math.random() < 0.65) {
+    if (frame % 80 === 0 && Math.random() < 0.45) {
       const shooters = alive.filter(() => Math.random() < 0.35)
       const pool = shooters.length ? shooters : alive
       const shooter = pool[Math.floor(Math.random() * pool.length)]
@@ -188,7 +189,7 @@ export function createGame(canvas) {
 
   function updateAlienBullets() {
     alienBullets = alienBullets.filter((b) => {
-      b.y += 4.2
+      b.y += 2.4
       return b.y < H + 10
     })
   }
@@ -289,8 +290,10 @@ export function createGame(canvas) {
     for (const alien of aliens) drawAlien(alien)
     for (const ship of ships) drawShip(ship)
 
-    ctx.fillStyle = '#3ee8d6'
-    for (const b of playerBullets) ctx.fillRect(b.x, b.y, 4, 12)
+    for (const b of playerBullets) {
+      ctx.fillStyle = b.color
+      ctx.fillRect(b.x, b.y, 4, 12)
+    }
 
     ctx.fillStyle = '#ff6b4a'
     for (const b of alienBullets) ctx.fillRect(b.x, b.y, 4, 10)
@@ -305,7 +308,7 @@ export function createGame(canvas) {
   function tick() {
     if (state === 'playing') {
       moveShips()
-      firePlayerBullets()
+      autoFire()
       updatePlayerBullets()
       updateAliens()
       updateAlienBullets()
@@ -316,7 +319,7 @@ export function createGame(canvas) {
   }
 
   function onKeyDown(e) {
-    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
+    if (['ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
       e.preventDefault()
     }
     keys.add(e.code)

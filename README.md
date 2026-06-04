@@ -6,8 +6,8 @@ Classic Space Invaders with **two player ships** on one screen — co-op on a si
 
 | Ship | Move left | Move right | Fire |
 |------|-----------|------------|------|
-| **Ship 1** (cyan) | `A` | `D` | `W` |
-| **Ship 2** (magenta) | `←` | `→` | `↑` |
+| **Ship 1** (cyan) | `A` | `D` | Automatic (cyan bullets) |
+| **Ship 2** (magenta) | `←` | `→` | Automatic (magenta bullets) |
 
 You share **6 lives**. Clear all invaders to win. If they reach your line or lives hit zero, game over.
 
