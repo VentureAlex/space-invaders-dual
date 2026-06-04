@@ -1,0 +1,149 @@
+:root {
+  --bg: #050508;
+  --panel: #0c1020;
+  --cyan: #3ee8d6;
+  --magenta: #ff4fd8;
+  --lime: #b8ff3c;
+  --text: #e8f4ff;
+  --muted: #6a7a94;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 0%, #141a33 0%, var(--bg) 55%);
+  color: var(--text);
+  font-family: 'Press Start 2P', monospace;
+}
+
+#app {
+  position: relative;
+  padding: 1rem;
+}
+
+.hud {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.55rem;
+}
+
+.hud h1 {
+  margin: 0;
+  font-size: 0.65rem;
+  color: var(--cyan);
+  text-shadow: 0 0 12px rgba(62, 232, 214, 0.5);
+}
+
+.hud__block--right {
+  text-align: right;
+}
+
+.hud__label {
+  display: block;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+  font-size: 0.45rem;
+}
+
+#score,
+#lives {
+  color: var(--lime);
+}
+
+#game {
+  display: block;
+  width: min(800px, 96vw);
+  height: auto;
+  aspect-ratio: 4 / 3;
+  background: var(--panel);
+  border: 3px solid #1e2a4a;
+  box-shadow:
+    0 0 0 1px #2a3d66,
+    0 12px 40px rgba(0, 0, 0, 0.55),
+    inset 0 0 60px rgba(62, 232, 214, 0.04);
+  image-rendering: pixelated;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem 2.5rem;
+  margin-top: 0.85rem;
+  font-size: 0.42rem;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.controls__ship strong {
+  color: var(--text);
+}
+
+.controls__ship:first-child strong {
+  color: var(--cyan);
+}
+
+.controls__ship:last-child strong {
+  color: var(--magenta);
+}
+
+kbd {
+  display: inline-block;
+  padding: 0.15em 0.4em;
+  margin: 0 0.1em;
+  font-family: inherit;
+  font-size: 0.9em;
+  color: var(--text);
+  background: #151c30;
+  border: 1px solid #2a3d66;
+  border-radius: 3px;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  background: rgba(5, 5, 8, 0.82);
+  text-align: center;
+  padding: 2rem;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay p {
+  margin: 0;
+  font-size: 0.65rem;
+  line-height: 1.9;
+  max-width: 28rem;
+}
+
+#restart-btn {
+  font-family: inherit;
+  font-size: 0.5rem;
+  padding: 0.85rem 1.25rem;
+  cursor: pointer;
+  color: var(--bg);
+  background: var(--cyan);
+  border: none;
+  border-radius: 4px;
+}
+
+#restart-btn:hover {
+  background: var(--lime);
+}

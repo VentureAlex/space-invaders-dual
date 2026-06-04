@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👾</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dual Space Invaders</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <header class="hud">
+        <div class="hud__block">
+          <span class="hud__label">Score</span>
+          <span id="score">0</span>
+        </div>
+        <div class="hud__block hud__block--center">
+          <h1>Dual Invaders</h1>
+        </div>
+        <div class="hud__block hud__block--right">
+          <span class="hud__label">Lives</span>
+          <span id="lives">6</span>
+        </div>
+      </header>
+
+      <canvas id="game" width="800" height="600" aria-label="Dual Space Invaders game"></canvas>
+
+      <footer class="controls">
+        <div class="controls__ship">
+          <strong>Ship 1</strong> — Move: <kbd>A</kbd> <kbd>D</kbd> · Fire: <kbd>W</kbd>
+        </div>
+        <div class="controls__ship">
+          <strong>Ship 2</strong> — Move: <kbd>←</kbd> <kbd>→</kbd> · Fire: <kbd>↑</kbd>
+        </div>
+      </footer>
+
+      <div id="overlay" class="overlay hidden" role="dialog" aria-modal="true">
+        <p id="overlay-text"></p>
+        <button type="button" id="restart-btn">Play again</button>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
